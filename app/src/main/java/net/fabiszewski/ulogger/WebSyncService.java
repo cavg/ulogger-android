@@ -82,7 +82,7 @@ public class WebSyncService extends IntentService {
             pi = null;
         }
 
-        if (!isAuthorized) {
+        /*if (!isAuthorized) {
             try {
                 web.authorize();
             } catch (WebAuthException|IOException|JSONException e) {
@@ -91,8 +91,8 @@ public class WebSyncService extends IntentService {
             }
 
             isAuthorized = true;
-        }
-
+        }*/
+        isAuthorized = true;
         // get track id
         int trackId = getTrackId();
         if (trackId > 0) {

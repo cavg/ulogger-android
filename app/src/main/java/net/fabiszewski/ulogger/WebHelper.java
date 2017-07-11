@@ -166,7 +166,18 @@ class WebHelper {
                 out.flush();
 
                 int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_MOVED_PERM
+
+                if (responseCode == HttpURLConnection.HTTP_OK){
+                    redirect = false;
+                    /*try {
+                        out.close();
+                        connection.getInputStream().close();
+                        connection.disconnect();
+                    } catch (final IOException e) {
+                        if (Logger.DEBUG) { Log.d(TAG, "[connection cleanup failed (ignored)]"); }
+                    }*/
+                }
+                /*if (responseCode == HttpURLConnection.HTTP_MOVED_PERM
                         || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
                         || responseCode == HttpURLConnection.HTTP_SEE_OTHER
                         || responseCode == 307) {
@@ -197,7 +208,7 @@ class WebHelper {
                 }
                 else if (responseCode != HttpURLConnection.HTTP_OK) {
                     throw new IOException(context.getString(R.string.e_http_code, responseCode));
-                }
+                }*/
             } while (redirect);
 
             in = new BufferedInputStream(connection.getInputStream());
@@ -265,12 +276,7 @@ class WebHelper {
         try {
             String response = postWithParams(params);
             JSONObject json = new JSONObject(response);
-            boolean error = json.getBoolean("error");
-            if (error) {
-                throw new IOException(context.getString(R.string.e_server_response));
-            } else {
-                return json.getInt("trackid");
-            }
+            return json.getInt("trackid");
         } catch (JSONException e) {
             if (Logger.DEBUG) { Log.d(TAG, "[startTrack json failed: " + e + "]"); }
             throw new IOException(e);
